@@ -1,24 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import usePokemonList from 'hooks/usePokemonList'
+import GlobalStyles, { Container } from 'styles/globals'
+
+import { IPokemon } from './interfaces/entities';
+import Card from 'components/Card';
+import LazyLoad from "react-lazyload";
 
 function App() {
+  const { list, isError, isLoading } = usePokemonList();
+
+  console.log(list)
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <GlobalStyles />
+      <Container>
+        {list?.map((x: IPokemon, key: any) => {
+          return (
+            <LazyLoad key={key} once>
+              <Card 
+                liked={x.liked} 
+                name={x.name} 
+                image={x.image} 
+                color={x.color} 
+                dexNumber={x.dexNumber}
+              />
+            </LazyLoad>
+          )
+        })}
+      </Container>
     </div>
   );
 }
